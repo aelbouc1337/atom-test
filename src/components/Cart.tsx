@@ -38,13 +38,13 @@ const Cart: React.FC<CartProps> = ({ showCart, setShowCart }) => {
         initial={{ x: "100%" }}
         animate={{ x: showCart ? "0%" : "100%" }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="absolute md:top-28 top-28 md:right-0 right-0 w-full lg:w-[50%] md:px-8 md:py-4 p-2 bg-white rounded-3xl shadow-2xl shadow-slate-700"
+        className="absolute md:right-0 right-0 w-full lg:w-[50%] md:px-8 md:py-4 p-2 bg-white rounded-3xl shadow-2xl shadow-slate-700"
       >
         <div
           onClick={() => setShowCart(false)}
           className=" flex flex-row-reverse cursor-pointer mb-2"
         >
-          <div className="p-2 border-2 border-black rounded-full">
+          <div className="p-2 border-2 mb-4 border-black rounded-full">
             <IoClose size={25} />
           </div>
         </div>
