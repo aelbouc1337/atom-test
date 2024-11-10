@@ -4,7 +4,7 @@ import { RootState } from "@/store";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { addToInventory } from "@/store/slices/authSlice";
+import { addToInventory, setUserProfile } from "@/store/slices/authSlice";
 import { clearCart } from "@/store/slices/cartSlice";
 import OrderConfirmationModal from "@/components/OrderConfirmationModal";
 import toast from "react-hot-toast";
@@ -18,6 +18,8 @@ const Checkout: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart.items);
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
+  const [editableProfile, setEditableProfile] = useState(userProfile);
+
   useEffect(() => {
     const isProfileComplete =
       userProfile.firstName &&
@@ -30,6 +32,16 @@ const Checkout: React.FC = () => {
     }
   }, [userProfile, router]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditableProfile((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveProfile = () => {
+    dispatch(setUserProfile(editableProfile));
+    toast.success("Profile information updated!");
+  };
+
   const handleConfirmOrder = () => {
     dispatch(addToInventory(cart));
     dispatch(clearCart());
@@ -40,6 +52,8 @@ const Checkout: React.FC = () => {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+
+      {/* Editable User Information */}
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Your Information</h2>
         <form className="space-y-4">
@@ -49,9 +63,10 @@ const Checkout: React.FC = () => {
             </label>
             <input
               type="text"
-              value={userProfile.firstName}
-              readOnly
-              className="w-full border rounded-lg p-2 bg-gray-100"
+              name="firstName"
+              value={editableProfile.firstName}
+              onChange={handleInputChange}
+              className="w-full border rounded-lg p-2"
             />
           </div>
           <div>
@@ -60,18 +75,20 @@ const Checkout: React.FC = () => {
             </label>
             <input
               type="text"
-              value={userProfile.lastName}
-              readOnly
-              className="w-full border rounded-lg p-2 bg-gray-100"
+              name="lastName"
+              value={editableProfile.lastName}
+              onChange={handleInputChange}
+              className="w-full border rounded-lg p-2"
             />
           </div>
           <div>
             <label className="block text-sm font-semibold mb-1">Address</label>
             <input
               type="text"
-              value={userProfile.address}
-              readOnly
-              className="w-full border rounded-lg p-2 bg-gray-100"
+              name="address"
+              value={editableProfile.address}
+              onChange={handleInputChange}
+              className="w-full border rounded-lg p-2"
             />
           </div>
           <div>
@@ -80,14 +97,22 @@ const Checkout: React.FC = () => {
             </label>
             <input
               type="tel"
-              value={userProfile.phoneNumber}
-              readOnly
-              className="w-full border rounded-lg p-2 bg-gray-100"
+              name="phoneNumber"
+              value={editableProfile.phoneNumber}
+              onChange={handleInputChange}
+              className="w-full border rounded-lg p-2"
             />
           </div>
         </form>
+        <button
+          onClick={handleSaveProfile}
+          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+        >
+          Save Information
+        </button>
       </div>
 
+      {/* Cart Summary */}
       <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">Your Cart</h2>
         <ul className="space-y-4">
