@@ -38,7 +38,6 @@ const authSlice = createSlice({
       state.userProfile = action.payload;
     },
     addToInventory: (state, action: PayloadAction<Product[]>) => {
-      // Add unique products from the cart to the user's inventory
       state.userProfile.inventory.push(...action.payload);
     },
   },
